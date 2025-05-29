@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTODRIVE - Sign Up</title>
+    <link rel="stylesheet" href="../css/styles1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero-header">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../../image/autodrive.jpg" alt="AUTODRIVE Logo" class="logo-img">
+                <span>AUTODRIVE</span>
+            </div>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-box">
+            <h2>Sign Up</h2>
+            <form id="signupForm" action="signup.php" method="post">
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" name="email" required>
+                </div>
+                <div class="form-group password-group">
+                    <label for="signup-password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="signup-password" name="password" required>
+                        <span class="toggle-password" data-target="signup-password">👁️</span>
+                    </div>
+                </div>
+                <div class="message" id="signupMessage"></div>
+                <button type="submit" name="submit">Sign Up</button>
+            </form>
+            <p class="link-text">Forgot Password? <a href="forgot_password.php">Click here</a></p>
+            <p class="link-text">Don't have an account? <a href="register.php">Register</a></p>
+        </div>
+    </div>
+
+    <footer class="hero-footer">
+        <div class="footer-content">
+            <p>AUTODRIVE is a platform dedicated to advancing autonomous driving technology, offering tools and resources for developers, enthusiasts, and businesses to explore self-driving innovations.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    this.textContent = '👁️';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

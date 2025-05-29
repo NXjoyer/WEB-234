@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUTODRIVE - Register</title>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <style>
+        /* Error message styling */
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        /* Error border styling for invalid fields */
+        .error-border {
+            border: 1px solid red !important;
+        }
+                /* Modal styling to match the website's design */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #FFC107;
+        }
+
+        .modal-content h3 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #212121;
+        }
+
+        .modal-content p {
+            margin: 0 0 1.5rem;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .modal-content button {
+            background: #FFC107;
+            color: #212121;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            width: auto;
+            margin: 0 0.5rem;
+        }
+
+        .modal-content button:hover {
+            transform: scale(1.05);
+            background: #e0a800;
+        }
+
+        .modal-content button.cancel-btn {
+            background: #e74c3c;
+        }
+
+        .modal-content button.cancel-btn:hover {
+            background: #c0392b;
+        }
+
+        .modal-content button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .modal-content button:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Preview Modal Specific Styles */
+        .preview-modal-content {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: space-between;
+        }
+
+        .preview-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .preview-details p {
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .preview-details p strong {
+            color: #1a1a1a;
+            font-weight: 700;
+            display: inline-block;
+            width: 120px;
+        }
+
+        .preview-details span {
+            color: #666;
+        }
+
+        .image-preview {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-preview img {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: transform 0.3s ease;
+        }
+
+        .image-preview img:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .preview-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .preview-modal-content {
+                max-width: 350px;
+            }
+            .preview-details p {
+                font-size: 0.9rem;
+            }
+
+            .preview-details p strong {
+                width: 100px;
+            }
+
+            .image-preview img {
+                max-width: 200px;
+                height: 150px;
+            }
+
+            .vehicle-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .preview-details p {
+                font-size: 0.85rem;
+            }
+
+            .preview-details p strong {
+                width: 90px;
+            }
+
+            .image-preview img {
+                max-width: 180px;
+                height: 120px;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="../css/styles1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero-header">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../../image/autodrive.jpg" alt="AUTODRIVE Logo" class="logo-img">
+                <span>AUTODRIVE</span>
+            </div>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-box">
+            <h2>Register</h2>
+            <form id="registerForm" action="register.php" method="post">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+
+                <div class="form-group password-group">
+                    <label for="password">Password (min 8 characters)</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" required minlength="8">
+                        <span class="toggle-password" data-target="password">👁️</span>
+                    </div>
+                    <div id="password-strength" class="password-strength"></div>
+                    <div id="password-error" class="error-message">Password must be at least 8 characters long</div>
+                </div>
+
+                <div class="form-group password-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-password" name="confirm-password" required minlength="8">
+                        <span class="toggle-password" data-target="confirm-password">👁️</span>
+                    </div>
+                    <div id="confirm-error" class="error-message">Passwords do not match</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="text" id="dob" name="dob" placeholder="dd/mm/yyyy" required pattern="\d{2}/\d{2}/\d{4}">
+                </div>
+
+                <div class="form-group gender-group">
+                    <label>Gender</label>
+                    <div class="radio-options">
+                        <label><input type="radio" name="gender" value="male" required> Male</label>
+                        <label><input type="radio" name="gender" value="female"> Female</label>
+                        <label><input type="radio" name="gender" value="other"> Other</label>
+                    </div>
+                </div>
+                
+                <div class="g-recaptcha" data-sitekey="6LekfwQrAAAAALbmkOUG8Z4v3w-psshE_tR1YM29"></div>
+                <div id="recaptcha-error" class="error-message" style="color: red; display: none;">Please complete the reCAPTCHA verification</div>
+                <div class="message" id="registerMessage"></div>
+                <div class="modal-overlay" id="preViewModal">
+                    <div class="modal-content" id="modal-content-sell">
+                        <div id="preview-contianer"></div>
+                        <button type="button" name="cancel-btn" id="cancel-btn" class="submit-btn" onclick="closeModal('preViewModal');">Cancel</button>
+                        <button type="submit" name="submit-confirm" class="submit-btn">Confirm</button>
+                    </div>
+                </div>
+                <button name="register-btn" id="register-btn" class="submit-btn">Register Now</button>
+            </form>
+            <p class="link-text">Already have an account? <a href="signup.php">Sign Up</a></p>
+        </div>
+    </div>
+
+    <!-- reCAPTCHA validation script -->
+    <script>
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function confirm_detail(event) {
+            event.preventDefault();
+            const preView = document.getElementById("preview-contianer");
+            const Email = document.getElementById("email").value;
+            const UserName = document.getElementById("username").value;
+            const birth= document.getElementById("dob").value;
+
+            var elementExist = document.getElementById('preView-detail');
+            if(elementExist){
+                elementExist.remove();
+            }
+            
+            const iDiv = document.createElement('div');
+            iDiv.id = 'preView-detail';
+            iDiv.innerHTML =  `
+                    <h3>Confirm Account Detail</h3>
+                    <p><strong>Email</strong> <span id="profile-email">${Email}</span></p>
+                    <p><strong>User Name</strong> <span id="profile-username">${UserName}</span></p>
+                    <p><strong>Date of Births</strong> <span id="profile-email">${birth}</span></p>
+                    `;
+            preView.appendChild(iDiv);
+            showModal('preViewModal');
+        }
+
+        document.getElementById('register-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            var recaptchaResponse = grecaptcha.getResponse();
+            if (recaptchaResponse.length === 0) {
+                document.getElementById('recaptcha-error').style.display = 'block';
+                event.preventDefault(); // Prevent form submission if reCAPTCHA not completed
+            } else {
+                document.getElementById('recaptcha-error').style.display = 'none';
+            }
+            
+            // Validate password length
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                document.getElementById('password-error').style.display = 'block';
+                document.getElementById('password').classList.add('error-border');
+                event.preventDefault();
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+                document.getElementById('password').classList.remove('error-border');
+            }
+            
+            // Validate password match
+            const confirmPassword = document.getElementById('confirm-password').value;
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-error').style.display = 'block';
+                document.getElementById('confirm-password').classList.add('error-border');
+                event.preventDefault();
+            } else {
+                document.getElementById('confirm-error').style.display = 'none';
+                document.getElementById('confirm-password').classList.remove('error-border');
+            }
+
+            confirm_detail(event);
+        });
+
+        // Password visibility toggle
+        document.querySelectorAll('.toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    this.textContent = '👁️';
+                }
+            });
+        });
+
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthIndicator = document.getElementById('password-strength');
+            
+            if (password.length === 0) {
+                strengthIndicator.textContent = '';
+                return;
+            }
+            
+            if (password.length < 8) {
+                strengthIndicator.textContent = 'Weak (too short)';
+                strengthIndicator.className = 'password-strength strength-weak';
+                return;
+            }
+            
+            // Simple strength check
+            let strength = 0;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (strength < 2) {
+                strengthIndicator.textContent = 'Weak';
+                strengthIndicator.className = 'password-strength strength-weak';
+            } else if (strength < 4) {
+                strengthIndicator.textContent = 'Medium';
+                strengthIndicator.className = 'password-strength strength-medium';
+            } else {
+                strengthIndicator.textContent = 'Strong';
+                strengthIndicator.className = 'password-strength strength-strong';
+            }
+        });
+    </script>
+
+    <footer class="hero-footer">
+        <div class="footer-content">
+            <p>AUTODRIVE is a platform dedicated to advancing autonomous driving technology, offering tools and resources for developers, enthusiasts, and businesses to explore self-driving innovations.</p>
+        </div>
+    </footer>
+</body>
+</html>
